@@ -7,6 +7,7 @@ import me.alpha432.oyvey.util.traits.Util;
 import net.minecraft.client.Camera;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.ShapeRenderer;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -188,8 +189,11 @@ public class RenderUtil implements Util {
         double maxZ = box.maxZ - camera.z();
 
         RenderSystem.lineWidth(Math.max(1.0f, lineWidth));
-        ShapeRenderer.renderLineBox(stack, minX, minY, minZ, maxX, maxY, maxZ,
+        var bufferSource = mc.renderBuffers().bufferSource();
+        VertexConsumer vertexConsumer = bufferSource.getBuffer(RenderType.lines());
+        ShapeRenderer.renderLineBox(stack.last(), vertexConsumer, minX, minY, minZ, maxX, maxY, maxZ,
                 c.getRed() / 255.0f, c.getGreen() / 255.0f, c.getBlue() / 255.0f, c.getAlpha() / 255.0f);
+        bufferSource.endBatch(RenderType.lines());
         RenderSystem.lineWidth(1.0f);
     }
 
