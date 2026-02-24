@@ -6,6 +6,7 @@ import com.mojang.math.Axis;
 import me.alpha432.oyvey.util.traits.Util;
 import net.minecraft.client.Camera;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.BufferRenderer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.AABB;
@@ -242,7 +243,7 @@ public class RenderUtil implements Util {
     }
 
     private static void draw(BufferBuilder builder) {
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        BufferUploader.drawWithShader(builder.buildOrThrow());
+        RenderSystem.setShader(GameRenderer::getPositionColorProgram);
+        BufferRenderer.drawWithGlobalProgram(builder.buildOrThrow());
     }
 }
