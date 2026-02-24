@@ -21,7 +21,7 @@ public class ChronusDrillRenderModule extends Module {
     private final Setting<Float> cubeSize = num("CubeSize", 1.0f, 0.1f, 1.0f);
 
     public ChronusDrillRenderModule() {
-        super("ChronusDrillRender", "Space-themed 3x3 drill plane render.", Category.CHRONUS_FEATURES);
+        super("Drill Render", "Space-themed 3x3 drill plane render.", Category.CHRONUS_FEATURES);
     }
 
     @Subscribe
@@ -49,7 +49,6 @@ public class ChronusDrillRenderModule extends Module {
                 Vec3 min = new Vec3(pos.getX() + inset, pos.getY() + inset, pos.getZ() + inset);
                 Vec3 max = new Vec3(pos.getX() + 1 - inset, pos.getY() + 1 - inset, pos.getZ() + 1 - inset);
 
-                RenderUtil.drawBoxFilled(event.getMatrix(), new net.minecraft.world.phys.AABB(min, max), sideColor.getValue());
                 RenderUtil.drawBox(event.getMatrix(), new net.minecraft.world.phys.AABB(min, max), lineColor.getValue(), lineWidth.getValue());
             }
         }

@@ -6,6 +6,7 @@ import com.mojang.math.Axis;
 import me.alpha432.oyvey.util.traits.Util;
 import net.minecraft.client.Camera;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.renderer.ShapeRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -179,47 +180,16 @@ public class RenderUtil implements Util {
 
     public static void drawBox(PoseStack stack, AABB box, Color c, float lineWidth) {
         Vec3 camera = mc.getEntityRenderDispatcher().camera.getPosition();
-        float minX = (float) (box.minX - camera.x());
-        float minY = (float) (box.minY - camera.y());
-        float minZ = (float) (box.minZ - camera.z());
-        float maxX = (float) (box.maxX - camera.x());
-        float maxY = (float) (box.maxY - camera.y());
-        float maxZ = (float) (box.maxZ - camera.z());
-
-        BufferBuilder bufferBuilder = Tesselator.getInstance().begin(VertexFormat.Mode.LINES, DefaultVertexFormat.POSITION_COLOR_NORMAL);
-        PoseStack.Pose pose = stack.last();
-        int color = c.getRGB();
-
-        bufferBuilder.addVertex(pose, minX, minY, minZ).setColor(color).setNormal(1, 0, 0);
-        bufferBuilder.addVertex(pose, maxX, minY, minZ).setColor(color).setNormal(1, 0, 0);
-        bufferBuilder.addVertex(pose, minX, minY, minZ).setColor(color).setNormal(0, 1, 0);
-        bufferBuilder.addVertex(pose, minX, maxY, minZ).setColor(color).setNormal(0, 1, 0);
-        bufferBuilder.addVertex(pose, minX, minY, minZ).setColor(color).setNormal(0, 0, 1);
-        bufferBuilder.addVertex(pose, minX, minY, maxZ).setColor(color).setNormal(0, 0, 1);
-
-        bufferBuilder.addVertex(pose, maxX, minY, minZ).setColor(color).setNormal(0, 1, 0);
-        bufferBuilder.addVertex(pose, maxX, maxY, minZ).setColor(color).setNormal(0, 1, 0);
-        bufferBuilder.addVertex(pose, maxX, maxY, minZ).setColor(color).setNormal(-1, 0, 0);
-        bufferBuilder.addVertex(pose, minX, maxY, minZ).setColor(color).setNormal(-1, 0, 0);
-        bufferBuilder.addVertex(pose, minX, maxY, minZ).setColor(color).setNormal(0, 0, 1);
-        bufferBuilder.addVertex(pose, minX, maxY, maxZ).setColor(color).setNormal(0, 0, 1);
-
-        bufferBuilder.addVertex(pose, minX, maxY, maxZ).setColor(color).setNormal(0, -1, 0);
-        bufferBuilder.addVertex(pose, minX, minY, maxZ).setColor(color).setNormal(0, -1, 0);
-        bufferBuilder.addVertex(pose, minX, minY, maxZ).setColor(color).setNormal(1, 0, 0);
-        bufferBuilder.addVertex(pose, maxX, minY, maxZ).setColor(color).setNormal(1, 0, 0);
-        bufferBuilder.addVertex(pose, maxX, minY, maxZ).setColor(color).setNormal(0, 0, -1);
-        bufferBuilder.addVertex(pose, maxX, minY, minZ).setColor(color).setNormal(0, 0, -1);
-
-        bufferBuilder.addVertex(pose, minX, maxY, maxZ).setColor(color).setNormal(1, 0, 0);
-        bufferBuilder.addVertex(pose, maxX, maxY, maxZ).setColor(color).setNormal(1, 0, 0);
-        bufferBuilder.addVertex(pose, maxX, minY, maxZ).setColor(color).setNormal(0, 1, 0);
-        bufferBuilder.addVertex(pose, maxX, maxY, maxZ).setColor(color).setNormal(0, 1, 0);
-        bufferBuilder.addVertex(pose, maxX, maxY, minZ).setColor(color).setNormal(0, 0, 1);
-        bufferBuilder.addVertex(pose, maxX, maxY, maxZ).setColor(color).setNormal(0, 0, 1);
+        double minX = box.minX - camera.x();
+        double minY = box.minY - camera.y();
+        double minZ = box.minZ - camera.z();
+        double maxX = box.maxX - camera.x();
+        double maxY = box.maxY - camera.y();
+        double maxZ = box.maxZ - camera.z();
 
         RenderSystem.lineWidth(Math.max(1.0f, lineWidth));
-        draw(bufferBuilder);
+        ShapeRenderer.renderLineBox(stack, minX, minY, minZ, maxX, maxY, maxZ,
+                c.getRed() / 255.0f, c.getGreen() / 255.0f, c.getBlue() / 255.0f, c.getAlpha() / 255.0f);
         RenderSystem.lineWidth(1.0f);
     }
 

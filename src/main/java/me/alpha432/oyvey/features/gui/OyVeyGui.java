@@ -65,16 +65,23 @@ public class OyVeyGui extends Screen {
         Item.context = context;
         int w = context.guiWidth();
         int h = context.guiHeight();
-        int top = new Color(35, 18, 64, 185).getRGB();
-        int bottom = new Color(18, 8, 38, 210).getRGB();
+        int top = new Color(35, 18, 64, 150).getRGB();
+        int bottom = new Color(18, 8, 38, 185).getRGB();
         context.fillGradient(0, 0, w, h, top, bottom);
 
-        for (int i = 0; i < 70; i++) {
-            int seedX = (i * 73) % Math.max(1, w);
-            int seedY = (i * 47) % Math.max(1, h);
-            int twinkle = (int) ((Math.sin((delta + i) * 0.35f) + 1.0f) * 45.0f);
-            int color = new Color(255, 210, 255, 90 + twinkle).getRGB();
-            context.fill(seedX, seedY, seedX + 1, seedY + 1, color);
+        float t = (System.currentTimeMillis() % 120000L) / 1000.0f;
+        for (int i = 0; i < 90; i++) {
+            float driftX = (float) Math.sin((t * 0.18f) + (i * 0.31f)) * 18.0f;
+            float driftY = (float) Math.cos((t * 0.14f) + (i * 0.43f)) * 12.0f;
+            int seedX = (int) (((i * 73) + (t * (8 + (i % 5)))) % Math.max(1, w));
+            int seedY = (int) (((i * 47) + (t * (5 + (i % 3)))) % Math.max(1, h));
+            int x = Math.floorMod((int) (seedX + driftX), Math.max(1, w));
+            int y = Math.floorMod((int) (seedY + driftY), Math.max(1, h));
+            int twinkle = (int) ((Math.sin((t * 2.2f) + i) + 1.0f) * 55.0f);
+            int alpha = Math.min(220, 35 + twinkle);
+            int size = (i % 7 == 0) ? 2 : 1;
+            int color = new Color(255, 210, 255, alpha).getRGB();
+            context.fill(x, y, x + size, y + size, color);
         }
 
         this.widgets.forEach(components -> components.drawScreen(context, mouseX, mouseY, delta));
