@@ -51,9 +51,16 @@ public class Widget
         this.drag(mouseX, mouseY);
         float totalItemHeight = this.open ? this.getTotalItemHeight() - 2.0f : 0.0f;
         int color = ClickGuiModule.getInstance().topColor.getValue().getRGB();
-        context.fill(this.x, this.y - 1, this.x + this.width, this.y + this.height - 6, ClickGuiModule.getInstance().rainbow.getValue() ? ColorUtil.rainbow(ClickGuiModule.getInstance().rainbowHue.getValue()).getRGB() : color);
+        if (ClickGuiModule.getInstance().rainbow.getValue()) {
+            context.fill(this.x, this.y - 1, this.x + this.width, this.y + this.height - 6, ColorUtil.rainbow(ClickGuiModule.getInstance().rainbowHue.getValue()).getRGB());
+        } else {
+            RenderUtil.horizontalGradient(context, this.x, this.y - 1, this.x + this.width, this.y + this.height - 6,
+                    new Color(156, 39, 176, 240), new Color(255, 64, 129, 240));
+            RenderUtil.rect(context, this.x, this.y - 1, this.x + this.width, this.y + this.height - 6, color, 1.0f);
+        }
         if (this.open) {
-            RenderUtil.rect(context, this.x, (float) this.y + 12.5f, this.x + this.width, (float) (this.y + this.height) + totalItemHeight, 0x77000000);
+            RenderUtil.verticalGradient(context, this.x, (float) this.y + 12.5f, this.x + this.width, (float) (this.y + this.height) + totalItemHeight,
+                    new Color(26, 14, 46, 210), new Color(12, 8, 24, 210));
         }
         drawString(this.getName(), (float) this.x + 3.0f, (float) this.y - 4.0f - (float) OyVeyGui.getClickGui().getTextOffset(), -1);
         ScissorUtil.enable(context, x, 0, x + width, mc.getWindow().getGuiScaledHeight());

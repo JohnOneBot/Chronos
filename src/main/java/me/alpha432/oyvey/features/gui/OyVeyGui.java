@@ -27,7 +27,7 @@ public class OyVeyGui extends Screen {
     private final ArrayList<Widget> widgets = new ArrayList<>();
 
     public OyVeyGui() {
-        super(Component.literal("OyVey"));
+        super(Component.literal("Chronos"));
         setInstance();
         load();
     }
@@ -50,7 +50,6 @@ public class OyVeyGui extends Screen {
     private void load() {
         int x = -84;
         for (Module.Category category : OyVey.moduleManager.getCategories()) {
-            if (category == Module.Category.HUD) continue;
             Widget panel = new Widget(category.getName(), x += 90, 4, true);
             OyVey.moduleManager.stream()
                     .filter(m -> m.getCategory() == category && !m.hidden)
@@ -64,7 +63,20 @@ public class OyVeyGui extends Screen {
     @Override
     public void render(GuiGraphics context, int mouseX, int mouseY, float delta) {
         Item.context = context;
-        context.fill(0, 0, context.guiWidth(), context.guiHeight(), new Color(0, 0, 0, 120).hashCode());
+        int w = context.guiWidth();
+        int h = context.guiHeight();
+        int top = new Color(35, 18, 64, 185).getRGB();
+        int bottom = new Color(18, 8, 38, 210).getRGB();
+        context.fillGradient(0, 0, w, h, top, bottom);
+
+        for (int i = 0; i < 70; i++) {
+            int seedX = (i * 73) % Math.max(1, w);
+            int seedY = (i * 47) % Math.max(1, h);
+            int twinkle = (int) ((Math.sin((delta + i) * 0.35f) + 1.0f) * 45.0f);
+            int color = new Color(255, 210, 255, 90 + twinkle).getRGB();
+            context.fill(seedX, seedY, seedX + 1, seedY + 1, color);
+        }
+
         this.widgets.forEach(components -> components.drawScreen(context, mouseX, mouseY, delta));
     }
 
