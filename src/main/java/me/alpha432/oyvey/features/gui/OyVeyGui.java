@@ -96,10 +96,7 @@ public class OyVeyGui extends Screen {
             context.fill(x, y, x + size, y + size, color);
         }
 
-        context.pose().pushPose();
-        context.pose().translate(0.0f, (1.0f - easedFade) * 10.0f, 0.0f);
         this.widgets.forEach(components -> components.drawScreen(context, mouseX, mouseY, delta));
-        context.pose().popPose();
 
         if (easedFade < 1.0f) {
             int overlay = new Color(6, 4, 12, (int) ((1.0f - easedFade) * 95)).getRGB();
