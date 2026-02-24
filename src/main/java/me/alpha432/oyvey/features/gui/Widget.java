@@ -51,14 +51,18 @@ public class Widget
         this.drag(mouseX, mouseY);
         float totalItemHeight = this.open ? this.getTotalItemHeight() - 2.0f : 0.0f;
         int color = ClickGuiModule.getInstance().topColor.getValue().getRGB();
+        boolean chronosTab = this.getName().equalsIgnoreCase("Chronos");
+
         if (ClickGuiModule.getInstance().rainbow.getValue()) {
             context.fill(this.x, this.y - 1, this.x + this.width, this.y + this.height - 6, ColorUtil.rainbow(ClickGuiModule.getInstance().rainbowHue.getValue()).getRGB());
         } else {
-            context.fill(this.x - 1, this.y - 2, this.x + this.width + 1, this.y + this.height - 5, new Color(255, 128, 214, 45).getRGB());
+            context.fill(this.x - 1, this.y - 2, this.x + this.width + 1, this.y + this.height - 5, new Color(255, 128, 214, chronosTab ? 78 : 45).getRGB());
             RenderUtil.horizontalGradient(context, this.x, this.y - 1, this.x + this.width, this.y + this.height - 6,
-                    new Color(156, 39, 176, 225), new Color(255, 64, 129, 225));
+                    chronosTab ? new Color(176, 52, 196, 240) : new Color(156, 39, 176, 225),
+                    chronosTab ? new Color(255, 94, 186, 240) : new Color(255, 64, 129, 225));
             RenderUtil.rect(context, this.x, this.y - 1, this.x + this.width, this.y + this.height - 6, color, 1.0f);
-            RenderUtil.rect(context, this.x, this.y + this.height - 7, this.x + this.width, this.y + this.height - 6, new Color(255, 210, 245, 130).getRGB());
+            RenderUtil.rect(context, this.x, this.y + this.height - 7, this.x + this.width, this.y + this.height - 6,
+                    new Color(255, 210, 245, chronosTab ? 180 : 130).getRGB());
         }
         if (this.open) {
             RenderUtil.verticalGradient(context, this.x, (float) this.y + 12.5f, this.x + this.width, (float) (this.y + this.height) + totalItemHeight,
@@ -102,7 +106,7 @@ public class Widget
         }
         if (mouseButton == 1 && this.isHovering(mouseX, mouseY)) {
             this.open = !this.open;
-            mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1f));
+            mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1f));
             return;
         }
         if (!this.open) {

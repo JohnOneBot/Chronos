@@ -10,7 +10,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.AABB;
 
 import java.awt.*;
 
@@ -45,13 +45,40 @@ public class ChronusDrillRenderModule extends Module {
                 BlockState planeState = mc.level.getBlockState(pos);
                 if (planeState.isAir() || !planeState.getFluidState().isEmpty()) continue;
 
-                float inset = (1.0f - cubeSize.getValue()) / 2.0f;
-                Vec3 min = new Vec3(pos.getX() + inset, pos.getY() + inset, pos.getZ() + inset);
-                Vec3 max = new Vec3(pos.getX() + 1 - inset, pos.getY() + 1 - inset, pos.getZ() + 1 - inset);
+                AABB box = buildFaceAnchoredBox(pos, hit.getDirection(), cubeSize.getValue());
 
-                RenderUtil.drawBox(event.getMatrix(), new net.minecraft.world.phys.AABB(min, max), lineColor.getValue(), lineWidth.getValue());
+                RenderUtil.drawBox(event.getMatrix(), box.inflate(0.0025), sideColor.getValue(), lineWidth.getValue() + 0.8f);
+                RenderUtil.drawBox(event.getMatrix(), box, lineColor.getValue(), lineWidth.getValue());
             }
         }
+    }
+
+
+    private AABB buildFaceAnchoredBox(BlockPos pos, Direction hitFace, float size) {
+        float inset = (1.0f - size) / 2.0f;
+        double minX = pos.getX() + inset;
+        double minY = pos.getY() + inset;
+        double minZ = pos.getZ() + inset;
+        double maxX = pos.getX() + 1 - inset;
+        double maxY = pos.getY() + 1 - inset;
+        double maxZ = pos.getZ() + 1 - inset;
+
+        switch (hitFace.getAxis()) {
+            case X -> {
+                minX = pos.getX() + 0.002;
+                maxX = pos.getX() + 0.998;
+            }
+            case Y -> {
+                minY = pos.getY() + 0.002;
+                maxY = pos.getY() + 0.998;
+            }
+            case Z -> {
+                minZ = pos.getZ() + 0.002;
+                maxZ = pos.getZ() + 0.998;
+            }
+        }
+
+        return new AABB(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
     private Direction remapVerticalFace(Direction face) {

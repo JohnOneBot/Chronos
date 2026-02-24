@@ -133,7 +133,7 @@ public class ColorButton extends Button {
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         if (this.isHovering(mouseX, mouseY) && mouseButton == 1) {
             open = !open;
-            mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1f));
+            mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1f));
         }
 
         if (mouseButton == 0) {
@@ -143,12 +143,12 @@ public class ColorButton extends Button {
 
             if (hoveringCopy) {
                 OyVeyGui.setColorClipboard(setting.getValue());
-                mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1f));
+                mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1f));
             }
             if (hoveringPaste && OyVeyGui.getColorClipboard() != null) {
                 setting.setValue(OyVeyGui.getColorClipboard());
                 hsb = Color.RGBtoHSB(setting.getValue().getRed(), setting.getValue().getGreen(), setting.getValue().getBlue(), null);
-                mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1f));
+                mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1f));
             }
         }
     }

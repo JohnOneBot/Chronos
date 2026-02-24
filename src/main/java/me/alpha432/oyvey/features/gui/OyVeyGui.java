@@ -11,6 +11,7 @@ import net.minecraft.client.input.CharacterEvent;
 import net.minecraft.client.input.KeyEvent;
 import net.minecraft.client.input.MouseButtonEvent;
 import net.minecraft.network.chat.Component;
+import org.lwjgl.glfw.GLFW;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -26,6 +27,8 @@ public class OyVeyGui extends Screen {
 
     private final ArrayList<Widget> widgets = new ArrayList<>();
     private long openedAtMs = System.currentTimeMillis();
+    private boolean closing = false;
+    private long closingAtMs = -1L;
 
     public OyVeyGui() {
         super(Component.literal("Chronos"));
@@ -66,6 +69,8 @@ public class OyVeyGui extends Screen {
     protected void init() {
         super.init();
         openedAtMs = System.currentTimeMillis();
+        closing = false;
+        closingAtMs = -1L;
     }
 
     @Override
@@ -74,8 +79,17 @@ public class OyVeyGui extends Screen {
         int w = context.guiWidth();
         int h = context.guiHeight();
 
-        float fade = Math.min(1.0f, (System.currentTimeMillis() - openedAtMs) / 320.0f);
-        float easedFade = 1.0f - (float) Math.pow(1.0f - fade, 3.0f);
+        float fadeIn = Math.min(1.0f, (System.currentTimeMillis() - openedAtMs) / 520.0f);
+        float easedFade = 1.0f - (float) Math.pow(1.0f - fadeIn, 3.0f);
+        if (closing) {
+            float fadeOut = Math.min(1.0f, (System.currentTimeMillis() - closingAtMs) / 360.0f);
+            float easedOut = 1.0f - (float) Math.pow(1.0f - fadeOut, 2.0f);
+            easedFade = Math.max(0.0f, 1.0f - easedOut);
+            if (easedFade <= 0.01f) {
+                mc.setScreen(null);
+                return;
+            }
+        }
 
         int top = new Color(35, 18, 64, (int) (150 * easedFade)).getRGB();
         int bottom = new Color(18, 8, 38, (int) (185 * easedFade)).getRGB();
@@ -106,13 +120,13 @@ public class OyVeyGui extends Screen {
 
     @Override
     public boolean mouseClicked(MouseButtonEvent click, boolean doubled) {
-        this.widgets.forEach(components -> components.mouseClicked((int) click.x(), (int) click.y(), click.button()));
+        if (!closing) this.widgets.forEach(components -> components.mouseClicked((int) click.x(), (int) click.y(), click.button()));
         return super.mouseClicked(click, doubled);
     }
 
     @Override
     public boolean mouseReleased(MouseButtonEvent click) {
-        this.widgets.forEach(components -> components.mouseReleased((int) click.x(), (int) click.y(), click.button()));
+        if (!closing) this.widgets.forEach(components -> components.mouseReleased((int) click.x(), (int) click.y(), click.button()));
         return super.mouseReleased(click);
     }
 
@@ -128,7 +142,17 @@ public class OyVeyGui extends Screen {
 
     @Override
     public boolean keyPressed(KeyEvent input) {
-        this.widgets.forEach(component -> component.onKeyPressed(input.input()));
+        if (input.input() == GLFW.GLFW_KEY_ESCAPE) {
+            if (!closing) {
+                closing = true;
+                closingAtMs = System.currentTimeMillis();
+            }
+            return true;
+        }
+
+        if (!closing) {
+            this.widgets.forEach(component -> component.onKeyPressed(input.input()));
+        }
         return super.keyPressed(input);
     }
 
