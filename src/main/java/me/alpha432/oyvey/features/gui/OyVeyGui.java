@@ -86,7 +86,7 @@ public class OyVeyGui extends Screen {
             float easedOut = 1.0f - (float) Math.pow(1.0f - fadeOut, 2.0f);
             easedFade = Math.max(0.0f, 1.0f - easedOut);
             if (easedFade <= 0.01f) {
-                mc.setScreen(null);
+                if (this.minecraft != null) this.minecraft.setScreen(null);
                 return;
             }
         }
