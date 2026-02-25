@@ -13,6 +13,8 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.lwjgl.opengl.GL11;
+
 public class PlayerEspModule extends Module {
     private final Setting<Boolean> ignoreFriends = bool("IgnoreFriends", false);
     private final Setting<Color> fillTopColor = color("FillTop", 255, 114, 255, 90);
@@ -55,6 +57,10 @@ public class PlayerEspModule extends Module {
     public void onRender3D(Render3DEvent event) {
         if (nullCheck()) return;
 
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+
         for (Player player : mc.level.players()) {
             if (!canRenderPlayer(player)) continue;
 
@@ -63,9 +69,12 @@ public class PlayerEspModule extends Module {
             RenderUtil.drawBox(event.getMatrix(), box, lineColor.getValue(), lineWidth.getValue());
 
             if (tracers.getValue()) {
-                drawTracerDotted(event, player);
+                drawTracerLine(event, player);
             }
         }
+
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDisable(GL11.GL_BLEND);
     }
 
     private void renderPseudoFill(Render3DEvent event, AABB box) {
@@ -80,16 +89,29 @@ public class PlayerEspModule extends Module {
         }
     }
 
-    private void drawTracerDotted(Render3DEvent event, Player player) {
+    private void drawTracerLine(Render3DEvent event, Player player) {
         Vec3 from = mc.player.getEyePosition(event.getDelta());
         Vec3 to = player.getBoundingBox().getCenter();
 
-        for (int i = 0; i < 18; i++) {
-            double t = i / 17.0;
-            Color dotColor = blend(tracerStart.getValue(), tracerEnd.getValue(), t);
-            Vec3 dot = from.lerp(to, t);
-            AABB marker = new AABB(dot.x - 0.03, dot.y - 0.03, dot.z - 0.03, dot.x + 0.03, dot.y + 0.03, dot.z + 0.03);
-            RenderUtil.drawBox(event.getMatrix(), marker, dotColor, 1.0f);
+        final int segments = 36;
+        final double thickness = 0.012;
+        Vec3 prev = from;
+
+        for (int i = 1; i <= segments; i++) {
+            double t = i / (double) segments;
+            Vec3 next = from.lerp(to, t);
+            Color color = blend(tracerStart.getValue(), tracerEnd.getValue(), t);
+
+            AABB segment = new AABB(
+                    Math.min(prev.x, next.x) - thickness,
+                    Math.min(prev.y, next.y) - thickness,
+                    Math.min(prev.z, next.z) - thickness,
+                    Math.max(prev.x, next.x) + thickness,
+                    Math.max(prev.y, next.y) + thickness,
+                    Math.max(prev.z, next.z) + thickness
+            );
+            RenderUtil.drawBox(event.getMatrix(), segment, color, 1.0f);
+            prev = next;
         }
     }
 
