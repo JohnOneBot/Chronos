@@ -10,6 +10,7 @@ import me.alpha432.oyvey.features.commands.ModuleCommand;
 import me.alpha432.oyvey.features.modules.Module;
 import me.alpha432.oyvey.features.modules.chronos.ChronusDrillRenderModule;
 import me.alpha432.oyvey.features.modules.client.ClickGuiModule;
+import me.alpha432.oyvey.features.modules.visuals.VisualsModule;
 import me.alpha432.oyvey.util.traits.Jsonable;
 import me.alpha432.oyvey.util.traits.Util;
 import org.slf4j.Logger;
@@ -30,6 +31,7 @@ public class ModuleManager implements Jsonable, Util {
     public void init() {
         register(new ClickGuiModule());
         register(new ChronusDrillRenderModule());
+        register(new VisualsModule());
 
         LOGGER.info("Registered {} modules", modules.size());
 
