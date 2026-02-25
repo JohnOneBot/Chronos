@@ -13,7 +13,6 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.lwjgl.opengl.GL11;
 
 public class PlayerEspModule extends Module {
     private final Setting<Boolean> ignoreFriends = bool("IgnoreFriends", false);
@@ -57,10 +56,6 @@ public class PlayerEspModule extends Module {
     public void onRender3D(Render3DEvent event) {
         if (nullCheck()) return;
 
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
-
         for (Player player : mc.level.players()) {
             if (!canRenderPlayer(player)) continue;
 
@@ -73,8 +68,6 @@ public class PlayerEspModule extends Module {
             }
         }
 
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glDisable(GL11.GL_BLEND);
     }
 
     private void renderPseudoFill(Render3DEvent event, AABB box) {
@@ -93,8 +86,8 @@ public class PlayerEspModule extends Module {
         Vec3 from = mc.player.getEyePosition(event.getDelta());
         Vec3 to = player.getBoundingBox().getCenter();
 
-        final int segments = 36;
-        final double thickness = 0.012;
+        final int segments = 18;
+        final double thickness = 0.008;
         Vec3 prev = from;
 
         for (int i = 1; i <= segments; i++) {
