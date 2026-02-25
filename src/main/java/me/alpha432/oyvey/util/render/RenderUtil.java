@@ -8,7 +8,6 @@ import net.minecraft.client.Camera;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.ShapeRenderer;
 import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
@@ -216,7 +215,6 @@ public class RenderUtil implements Util {
     }
 
     private static void draw(BufferBuilder builder) {
-        RenderSystem.setShader(GameRenderer::getPositionColorShader);
-        BufferUploader.drawWithShader(builder.buildOrThrow());
+        builder.buildOrThrow();
     }
 }
