@@ -17,7 +17,6 @@ public class VisualsModule extends Module {
     // Environment
     private final Setting<Boolean> customFog = bool("CustomFog", true);
     private final Setting<Color> fogColor = color("FogColor", 166, 110, 255, 255);
-    private final Setting<TimePreset> forceTime = mode("ForceTime", TimePreset.OFF);
     private final Setting<WeatherPreset> forceWeather = mode("ForceWeather", WeatherPreset.OFF);
 
     // Sky particles
@@ -63,10 +62,6 @@ public class VisualsModule extends Module {
     }
 
     private void applyTimeAndWeather() {
-        if (forceTime.getValue() != TimePreset.OFF) {
-            mc.level.setDayTime(forceTime.getValue().ticks);
-        }
-
         switch (forceWeather.getValue()) {
             case CLEAR -> {
                 mc.level.setRainLevel(0.0f);
@@ -158,20 +153,6 @@ public class VisualsModule extends Module {
 
         ParticleStyle(ParticleOptions type) {
             this.type = type;
-        }
-    }
-
-    private enum TimePreset {
-        OFF(-1),
-        SUNRISE(23000),
-        DAY(1000),
-        SUNSET(12000),
-        MIDNIGHT(18000);
-
-        private final long ticks;
-
-        TimePreset(long ticks) {
-            this.ticks = ticks;
         }
     }
 
