@@ -47,7 +47,7 @@ public class ChronusDrillRenderModule extends Module {
 
                 AABB box = buildFaceAnchoredBox(pos, hit.getDirection(), cubeSize.getValue());
 
-                RenderUtil.drawBox(event.getMatrix(), box.inflate(0.0025), sideColor.getValue(), lineWidth.getValue() + 0.8f);
+                RenderUtil.drawBoxFilled(event.getMatrix(), box, sideColor.getValue());
                 RenderUtil.drawBox(event.getMatrix(), box, lineColor.getValue(), lineWidth.getValue());
             }
         }
