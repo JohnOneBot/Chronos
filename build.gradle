@@ -47,8 +47,6 @@ dependencies {
     mappings loom.officialMojangMappings()
     modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-    // Fabric API
-    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
     include implementation("com.github.cattyngmd.catformat:catformat-core:${project.catformat_version}")
     include modImplementation("com.github.cattyngmd.catformat:catformat-fabric:${project.catformat_version}")

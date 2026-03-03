@@ -15,15 +15,15 @@ public class ClickGuiModule extends Module {
     private static ClickGuiModule INSTANCE;
 
     public Setting<String> prefix = str("Prefix", ".");
-    public Setting<Color> color = color("Color", 0, 0, 255, 180);
-    public Setting<Color> topColor = color("TopColor", 0, 0, 150, 240);
+    public Setting<Color> color = color("Color", 180, 96, 255, 190);
+    public Setting<Color> topColor = color("TopColor", 255, 77, 166, 240);
     public Setting<Boolean> rainbow = bool("Rainbow", false);
     public Setting<Integer> rainbowHue = num("Delay", 240, 0, 600);
     public Setting<Float> rainbowBrightness = num("Brightness", 150.0f, 1.0f, 255.0f);
     public Setting<Float> rainbowSaturation = num("Saturation", 150.0f, 1.0f, 255.0f);
 
     public ClickGuiModule() {
-        super("ClickGui", "Opens the ClickGui", Module.Category.CLIENT);
+        super("ClickGui", "Opens the ClickGui", Module.Category.CHRONUS_FEATURES);
         setBind(GLFW.GLFW_KEY_RIGHT_SHIFT);
         rainbowHue.setVisibility(v -> rainbow.getValue());
         rainbowBrightness.setVisibility(v -> rainbow.getValue());

@@ -35,7 +35,7 @@ public class Button
     public void onMouseClick() {
         this.state = !this.state;
         this.toggle();
-        mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_BUTTON_CLICK, 1f));
+        mc.getSoundManager().play(SimpleSoundInstance.forUI(SoundEvents.UI_STONECUTTER_SELECT_RECIPE, 1f));
     }
 
     public void toggle() {

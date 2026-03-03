@@ -179,6 +179,7 @@ public class Module extends Feature implements Jsonable, Toggleable {
     }
 
     public enum Category {
+        CHRONUS_FEATURES("Chronos"),
         COMBAT("Combat"),
         MISC("Misc"),
         RENDER("Render"),

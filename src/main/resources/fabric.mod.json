@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "id": "oyvey",
+  "id": "chronos",
   "version": "${version}",
-  "name": "oyvey-ported",
-  "description": "free and opensource client base",
+  "name": "Chronos",
+  "description": "Chronos - a purple/pink space-themed client base.",
   "authors": [
     "3arthqu4ke",
     "alpha432",
@@ -28,7 +28,6 @@
   ],
   "depends": {
     "fabricloader": ">=${loader_version}",
-    "fabric": "*",
     "minecraft": "${minecraft_version}"
   }
 }
